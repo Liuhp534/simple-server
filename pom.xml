@@ -108,6 +108,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.1.0</version>
+				<!-- 下面那个可以见jar移动到指定的目录 -->
 				<!-- <executions>
 					<execution>
 						<id>default-jar</id>
@@ -122,6 +123,5 @@
 				</executions> -->
 			</plugin>
 		</plugins>
-
 	</build>
 </project>
