@@ -7,12 +7,14 @@
  * you entered into with Hzins,http://www.hzins.com.
  *  
  */   
-package cn.liu.hui.peng.simple.server; 
+package cn.liu.hui.peng.simple.server.mq; 
 
 import java.io.IOException;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
+
+import cn.liu.hui.peng.simple.server.RabbitConnection;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
@@ -34,7 +36,7 @@ import com.rabbitmq.client.ShutdownSignalException;
  * @date	2018年9月16日 上午10:27:08
  * @version      
  */
-public class RpcClient {
+public class DefaultExchange {
 
     public static void main(String[] args) {
 	createClient();
@@ -52,7 +54,7 @@ public class RpcClient {
 
 	    final String uuid = UUID.randomUUID().toString();
 	    BasicProperties props = new BasicProperties().builder().correlationId(uuid).replyTo(queneName).build();
-	    channel.basicPublish("", "rpc_liuhp_quene", props, String.valueOf(new Random().nextInt(100)).getBytes());// 发送消息
+	    channel.basicPublish("", "pluto_pos_hzmessage", props, String.valueOf("I'm come from default exchange").getBytes());// 发送消息
 	    System.out.println("default exchange \"\" 发送消息。。。。");
 	    // 接受返回的结果
 	    // 方式一 queneingConsumer 很多的问题，这个暂时不研究

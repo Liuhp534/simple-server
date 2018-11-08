@@ -7,10 +7,12 @@
  * you entered into with Hzins,http://www.hzins.com.
  *  
  */   
-package cn.liu.hui.peng.simple.server; 
+package cn.liu.hui.peng.simple.server.mq; 
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+
+import cn.liu.hui.peng.simple.server.RabbitConnection;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -29,7 +31,7 @@ import com.rabbitmq.client.AMQP.BasicProperties;
  * @date	2018年9月16日 上午10:08:23
  * @version      
  */
-public class RpcServer {
+public class DefaultExchangeQueue {
     
     public static void main(String[] args) {
 	consumerMessage();
