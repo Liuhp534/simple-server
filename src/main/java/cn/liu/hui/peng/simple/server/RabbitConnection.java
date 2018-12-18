@@ -27,7 +27,7 @@ import com.rabbitmq.client.ConnectionFactory;
  */
 public class RabbitConnection {
     
-    private final static String HOST = "192.168.10.59";
+    private final static String HOST = "192.168.10.59";//192.168.10.59
     
     private final static String VIRTUALHOST = "/";
     

@@ -26,6 +26,12 @@
 			<artifactId>amqp-client</artifactId>
 			<version>4.4.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<version>1.5.3.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -73,7 +79,7 @@
 				<version>3.1.0</version>
 				<executions>
 					<execution>
-						<id>copy-dependencies</id>
+						<id>copy</id><!-- copy-dependencies -->
 						<phase>package</phase>
 						<goals>
 							<goal>copy-dependencies</goal>
@@ -83,6 +89,7 @@
 							<outputDirectory>${basedir}/project/lib</outputDirectory>
 							<!-- jar依赖的jar是否包含，一般都是需要的所以false -->
 							<excludeTransitive>false</excludeTransitive>
+							<includeScope>runtime</includeScope>
 						</configuration>
 					</execution>
 				</executions>
@@ -114,18 +121,20 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.1.0</version>
 				<!-- 下面那个可以见jar移动到指定的目录 -->
-				<!-- <executions>
+				<executions>
 					<execution>
-						<id>default-jar</id>
+						<id>aaa-jar</id><!-- default-jar -->
 						<phase>package</phase>
 						<goals>
 							<goal>jar</goal>
 						</goals>
 						<configuration>
+							<classifier>${project.version}</classifier>
+                            <!-- <jarName>${project.artifactId}</jarName> -->
 							<outputDirectory>${basedir}/project/lib</outputDirectory>
 						</configuration>
 					</execution>
-				</executions> -->
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

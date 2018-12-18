@@ -10,6 +10,8 @@
 package cn.liu.hui.peng.simple.server.mq; 
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
@@ -42,10 +44,23 @@ public class DefaultExchange {
 	createClient();
     }
 
+    static Map<String, Object> getHeaders() {
+	Map<String, Object> headers = new HashMap<String, Object>();
+	headers.put("status", "00000");
+	headers.put("retreatNum", "181115094091117");
+	headers.put("command", "ins.api.cancelPolicy");
+	headers.put("statusText", "成功");
+	headers.put("companyId", "45");
+	headers.put("transNo", "20181114000751");
+	headers.put("productId", "354");
+	return headers;
+    }
     /**
      * 交换器发送数据
      * */
     public static void createClient() {
+	String body = "[{\"auditWay\":0,\"companyId\":135,\"productId\":3898,\"resultDetail\":{\"availableMoney\":\"148000\",\"cancelAmount\":\"148000\",\"cancelDate\":\"2018-11-15 12:11:00\",\"insureNo\":\"20181114000751\",\"isHesitant\":1,\"orderNo\":\"1542194574117\",\"policyNo\":\"86110020180210001101\",\"refundNo\":\"HZ1542250808164\"},\"resultStatusCode\":\"success\",\"resultStatusMsg\":\"退保成功\"}]";
+	
 	Connection conn = RabbitConnection.createConnection();
 	Channel channel = null;
 	try {
@@ -53,8 +68,8 @@ public class DefaultExchange {
 	    final String queneName = channel.queueDeclare().getQueue();
 
 	    final String uuid = UUID.randomUUID().toString();
-	    BasicProperties props = new BasicProperties().builder().correlationId(uuid).replyTo(queneName).build();
-	    channel.basicPublish("", "pluto_pos_hzmessage", props, String.valueOf("I'm come from default exchange").getBytes());// 发送消息
+	    BasicProperties props = new BasicProperties().builder().correlationId(uuid).replyTo(queneName).headers(getHeaders()).build();
+	    channel.basicPublish("", "pluto_pos_hzmessage", props, body.getBytes("utf-8"));// 发送消息
 	    System.out.println("default exchange \"\" 发送消息。。。。");
 	    // 接受返回的结果
 	    // 方式一 queneingConsumer 很多的问题，这个暂时不研究
