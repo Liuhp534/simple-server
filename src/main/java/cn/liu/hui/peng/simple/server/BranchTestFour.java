@@ -16,5 +16,6 @@ public class BranchTestFour {
         System.out.println("2019年3月7日14:26:51");
         System.out.println("2019年3月7日15:11:09");
         System.out.println("2019年3月7日15:38:25");
+        System.out.println("2019年3月7日15:42:26");
     }
 }
