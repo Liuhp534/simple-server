@@ -23,3 +23,17 @@
 *.tar.gz
 *.rar
 /target/
+
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+project/
+logs
+.project
+.settings
+.classpath
+target
+logs
