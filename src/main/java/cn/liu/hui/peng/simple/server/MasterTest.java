@@ -13,7 +13,8 @@ package cn.liu.hui.peng.simple.server;
 public class MasterTest {
 
     public static void main(String[] args) {
-	System.out.println("master 添加一 2018年12月18日13:06:02");
+
+        System.out.println("master 添加一 2018年12月18日13:06:02  aaa");
     }
 }
  
