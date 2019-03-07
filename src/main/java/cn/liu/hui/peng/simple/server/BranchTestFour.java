@@ -10,5 +10,6 @@ public class BranchTestFour {
     public static void main(String[] args) {
         System.out.println("test.....");
         System.out.println("test branch 2019年3月7日11:56:44");
+        System.out.println("test branch 2019年3月7日12:02:55");
     }
 }
