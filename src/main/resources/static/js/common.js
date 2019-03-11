@@ -1,4 +1,4 @@
-/**常用工具类*/
+/**常用工具类 test*/
 var commonUtils = {};
 var dateUtils = {};
 /**
