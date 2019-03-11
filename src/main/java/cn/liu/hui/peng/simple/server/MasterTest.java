@@ -16,6 +16,7 @@ public class MasterTest {
 
         System.out.println("master 添加一 2018年12月18日13:06:02  aaa");
         System.out.println("master 2019年3月11日17:01:16");
+        System.out.println("master 2019年3月11日17:01:47");
     }
 }
  
