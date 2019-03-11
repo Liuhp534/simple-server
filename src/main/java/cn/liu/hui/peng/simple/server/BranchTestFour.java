@@ -35,5 +35,6 @@ public class BranchTestFour {
         System.out.println("2019年3月9日09:56:44");
         System.out.println("主干 2019年3月11日12:49:18");
         System.out.println("分支 2019年3月11日12:56:15");
+        System.out.println("主干 2019年3月11日16:12:47");
     }
 }
