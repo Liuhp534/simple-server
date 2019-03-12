@@ -50,8 +50,7 @@ public class ServerNIOSocketCustome {
                 }
                 System.out.println("处理请求中......");
                 //获取selectionkey
-                Set<SelectionKey> keys = selector.keys();
-                Iterator<SelectionKey> it = keys.iterator();
+                Iterator<SelectionKey> it = selector.selectedKeys().iterator();
                 SelectionKey tempKey = null;
                 while (it.hasNext()) {
                     tempKey = it.next();
@@ -82,6 +81,7 @@ public class ServerNIOSocketCustome {
         }
 
         public void handlerRead(SelectionKey key) throws IOException {
+            System.out.println("handlerRead");
             //从selector中获取channel
             SocketChannel channel = (SocketChannel) key.channel();
             //获取buffer
@@ -105,8 +105,10 @@ public class ServerNIOSocketCustome {
         }
 
         public void handlerAccept(SelectionKey key) throws IOException {
+            System.out.println("handlerAccept");
             //从selector中获取channel
-            SocketChannel channel = ((ServerSocketChannel) key.channel()).accept();
+            ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
+            SocketChannel channel = serverSocketChannel.accept();
             channel.configureBlocking(Boolean.FALSE);
             channel.register(key.selector(), SelectionKey.OP_READ, ByteBuffer.allocate(bufferSize));
         }

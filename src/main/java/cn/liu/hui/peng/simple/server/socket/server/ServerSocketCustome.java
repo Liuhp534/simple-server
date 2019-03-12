@@ -27,26 +27,35 @@ public class ServerSocketCustome {
     * @date 2019/1/15 13:36
     */
     private static void createServerSocket() {
+        System.out.println("socket server start !");
         try {
-            //创建服务socket
-            ServerSocket serverSocket = new ServerSocket(8080);
-            //等待请求，阻塞的
-            Socket clientSocket = serverSocket.accept();
-            //接受数据
-            BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            String line = reader.readLine();
-            System.out.println("received from cilent : " + line);
-            //响应数据
-            PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
-            writer.write("received data : " + line);
-            writer.flush();
-            //关闭资源
-            reader.close();
-            writer.close();
-            clientSocket.close();
-            serverSocket.close();
+            int count = 1;
+            while (true) {
+                //创建服务socket
+                ServerSocket serverSocket = new ServerSocket(8080);
+                //等待请求，阻塞的
+                Socket clientSocket = serverSocket.accept();
+                //接受数据
+                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                String line = reader.readLine();
+                System.out.println("received from cilent : " + line);
+                //响应数据
+                PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
+                writer.write("come from server data!" + count);
+                writer.flush();
+                //关闭资源
+                reader.close();
+                writer.close();
+                clientSocket.close();
+                serverSocket.close();
+                count ++;
+                if (count > 10) {
+                    break;
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("socket server end !");
     }
 }

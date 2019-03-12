@@ -14,7 +14,11 @@ import java.net.Socket;
 public class ClientSocketCustome {
 
     public static void main(String[] args) {
-        clientCreate();
+        for (int i = 0; i < 2; i++) {
+            clientCreate();
+            System.out.println("client send");
+        }
+
     }
 
     /**
@@ -35,11 +39,11 @@ public class ClientSocketCustome {
             writer.flush();
 
             //读数据
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            System.out.println("server response data : " + reader.readLine());
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            //System.out.println("server response data : " + reader.readLine());
 
             writer.close();
-            reader.close();
+            //reader.close();
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
