@@ -45,7 +45,7 @@ public class ServerNIOSocketCustome {
             Handler handler = new Handler();
             while (true) {
                 if (selector.select(3000) == 0) {
-                    System.out.println("等待请求超时......");
+                    //System.out.println("等待请求超时......");
                     continue;
                 }
                 System.out.println("处理请求中......");
@@ -82,6 +82,11 @@ public class ServerNIOSocketCustome {
 
         public void handlerRead(SelectionKey key) throws IOException {
             System.out.println("handlerRead");
+            try {
+                Thread.sleep(3000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             //从selector中获取channel
             SocketChannel channel = (SocketChannel) key.channel();
             //获取buffer
@@ -98,7 +103,7 @@ public class ServerNIOSocketCustome {
                 System.out.println("received string : " + receivedStr);
 
                 //返回数据给客户端
-                buffer = ByteBuffer.wrap(("received data : " + receivedStr).getBytes());
+                buffer = ByteBuffer.wrap(("come from server !").getBytes());
                 channel.write(buffer);
                 channel.close();
             }
