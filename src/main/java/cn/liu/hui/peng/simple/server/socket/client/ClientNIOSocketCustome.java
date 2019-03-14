@@ -81,7 +81,7 @@ public class ClientNIOSocketCustome {
                 buffer.put(info.getBytes());
                 buffer.flip();
                 while (buffer.hasRemaining()) {
-                    System.out.println(buffer);
+                    System.out.println(info);
                     channel.write(buffer);
                 }
                 channel.register(selector, SelectionKey.OP_READ);
@@ -93,25 +93,30 @@ public class ClientNIOSocketCustome {
 
     private static void handleReadable(SelectionKey key) {
         System.out.println("handler read !");
-        SocketChannel sc = null;
+        SocketChannel client = null;
         try {
-            sc = (SocketChannel) key.channel();
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
-            int temp = sc.read(buffer); // 从channel读到buffer
-            String content = "";
-            if (temp > 0) {// 代表读完毕了,准备写(即打印出来)
-                buffer.flip(); // 为write()准备
-                // =====取出buffer里的数据
-                byte[] bytes = new byte[buffer.remaining()]; // 创建字节数组
-                buffer.get(bytes);// 将数据取出放到字节数组里
-                content += new String(bytes);
-                System.out.println("客户端收到 : " + content);
+            while (Boolean.TRUE) {//非阻塞的可能返回0，所以需要循环，异常则推出。
+                Selector selector = key.selector();
+                client = (SocketChannel) key.channel();
+                ByteBuffer buffer = ByteBuffer.allocate(10);
+                int temp = client.read(buffer); // 从channel读到buffer，服务端一直写入，那么每次从buffer中拿的数据不一定
+                if (temp > 0) {// 代表读完毕了
+                    buffer.flip(); // 为write()准备
+                    byte[] bytes = new byte[buffer.remaining()]; // 创建字节数组
+                    buffer.get(bytes);// 将数据取出放到字节数组里
+                    buffer.clear();
+                    System.out.println("客户端收到 : " + new String(bytes));
+                } else if (temp == -1) {
+                    System.out.println("退出读取服务端数据...");
+                    break;
+                }
+                //client.register(selector, SelectionKey.OP_READ, buffer);//不能重复注册
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                sc.close();
+                client.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

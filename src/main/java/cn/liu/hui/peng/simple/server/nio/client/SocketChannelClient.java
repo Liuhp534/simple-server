@@ -1,4 +1,4 @@
-package cn.liu.hui.peng.simple.server.nio;
+package cn.liu.hui.peng.simple.server.nio.client;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -18,7 +18,7 @@ public class SocketChannelClient {
     }
 
     /**
-    * @Description: socketChannel客户端
+    * @Description: socketChannel客户端，非selector版本
     * @param
     * @return
     * @throws
@@ -29,7 +29,7 @@ public class SocketChannelClient {
         try {
             SocketAddress address = new InetSocketAddress("127.0.0.1", 8080);
             SocketChannel client = SocketChannel.open();
-            client.configureBlocking(Boolean.TRUE);//可以阻塞和非阻塞的
+            client.configureBlocking(Boolean.FALSE);//可以阻塞和非阻塞的
             client.connect(address);
             if (client.finishConnect()) {
                 writeToServer(client);
@@ -73,7 +73,7 @@ public class SocketChannelClient {
     private static void readFromServer(SocketChannel client) {
         try {
             boolean stop = Boolean.FALSE;
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            ByteBuffer buffer = ByteBuffer.allocate(10);
             while (!stop) {//非阻塞状态下需要循环处理
                 buffer.clear();//切到写入状态
                 int byteCount = client.read(buffer);
@@ -81,9 +81,12 @@ public class SocketChannelClient {
                     buffer.flip();
                     byte[] bytes = new byte[buffer.remaining()];
                     buffer.get(bytes);
+                    buffer.clear();
                     System.out.println("客户端收到 : " + new String(bytes));
+                } else if (byteCount == -1) {
+                    System.out.println("退出读取服务端数据...");
+                    stop = Boolean.TRUE;
                 }
-                //stop = Boolean.TRUE;
             }
         } catch (Exception e) {
             e.printStackTrace();

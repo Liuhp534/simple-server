@@ -58,6 +58,8 @@ public class ServerNIOSocketCustome {
                         handler.handlerAccept(tempKey);
                     } else if (tempKey.isReadable()) {
                         handler.handlerRead(tempKey);
+                    } else if (tempKey.isWritable()) {
+                        handler.handlerWrite(tempKey);
                     }
                     it.remove();
                 }
@@ -70,6 +72,7 @@ public class ServerNIOSocketCustome {
     private static class Handler {
         private int bufferSize = 1024;
         private String localCharset = "UTF-8";
+        private int count = 1;
 
         public Handler () {
 
@@ -80,15 +83,48 @@ public class ServerNIOSocketCustome {
             this.localCharset = localCharset;
         }
 
+        public void handlerWrite(SelectionKey key) {
+            System.out.println("handlerWrite " + count);
+            SocketChannel channel = null;
+            try {
+                Thread.sleep(1L);
+                //从selector中获取channel
+                channel = (SocketChannel) key.channel();
+                //返回数据给客户端
+                ByteBuffer buffer = (ByteBuffer) key.attachment();
+                //ByteBuffer buffer = ByteBuffer.wrap(("come from server !" + count).getBytes());
+                buffer.put(("come from server !" + count).getBytes());
+                count ++;
+                buffer.flip();
+                System.out.println("limit : " + buffer.limit());
+                channel.write(buffer);
+                //channel.close();//不关闭可以一直执行
+                buffer.clear();
+                if (count > 100) {
+                    count = 1;
+                    channel.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                key.cancel();
+                try {
+                    channel.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+
         public void handlerRead(SelectionKey key) throws IOException {
             System.out.println("handlerRead");
-            try {
+            /*try {
                 Thread.sleep(3000L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
             //从selector中获取channel
             SocketChannel channel = (SocketChannel) key.channel();
+            Selector selector = key.selector();
             //获取buffer
             ByteBuffer buffer = (ByteBuffer) key.attachment();
             buffer.clear();
@@ -100,12 +136,10 @@ public class ServerNIOSocketCustome {
                 buffer.flip();
                 //将buffer接收中接收的值按照localCharset编码
                 String receivedStr = Charset.forName(localCharset).decode(buffer).toString();
+                buffer.clear();
                 System.out.println("received string : " + receivedStr);
 
-                //返回数据给客户端
-                buffer = ByteBuffer.wrap(("come from server !").getBytes());
-                channel.write(buffer);
-                channel.close();
+                SelectionKey writeKey = channel.register(selector, SelectionKey.OP_WRITE, ByteBuffer.allocate(bufferSize));
             }
         }
 
