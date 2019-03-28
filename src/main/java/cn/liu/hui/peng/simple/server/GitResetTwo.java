@@ -8,5 +8,6 @@ package cn.liu.hui.peng.simple.server;
 public class GitResetTwo {
     public static void main(String[] args) {
         System.out.println("第二次提交" + "2019年3月27日18:04:55");
+        System.out.println("旧文件提交 reset");
     }
 }
