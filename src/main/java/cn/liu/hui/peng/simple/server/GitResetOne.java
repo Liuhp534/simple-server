@@ -8,5 +8,6 @@ package cn.liu.hui.peng.simple.server;
 public class GitResetOne {
     public static void main(String[] args) {
         System.out.println("第一次提交" + "2019年3月27日18:03:21");
+        System.out.println("reset rebase commit1");
     }
 }
